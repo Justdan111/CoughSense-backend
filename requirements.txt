@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+numpy>=1.26,<3.0
+scikit-learn==1.6.1
+joblib
+soundfile
+librosa
+python-multipart
+requests
+python-jose
