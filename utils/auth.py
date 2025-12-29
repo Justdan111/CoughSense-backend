@@ -1,15 +1,16 @@
+
+import os
+import requests
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer
 from jose import jwt
-import requests
-import os
 
 security = HTTPBearer()
 
-SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID")
-SUPABASE_JWT_URL = f"https://{SUPABASE_PROJECT_ID}.supabase.co/auth/v1/certs"
+SUPABASE_PROJECT_ID = os.getenv("")
+JWKS_URL = f"https://{SUPABASE_PROJECT_ID}.supabase.co/auth/v1/certs"
 
-jwks = requests.get(SUPABASE_JWT_URL).json()
+jwks = requests.get(JWKS_URL).json()
 
 def verify_user(token=Depends(security)):
     try:
@@ -17,8 +18,9 @@ def verify_user(token=Depends(security)):
             token.credentials,
             jwks,
             algorithms=["RS256"],
-            audience="authenticated"
+            audience="authenticated",
+            options={"verify_exp": True}
         )
         return payload
-    except Exception:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    except Exception as e:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
