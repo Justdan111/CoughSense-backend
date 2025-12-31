@@ -53,5 +53,3 @@ async def predict(file: UploadFile):
 
 
 
-# Single endpoint only; /classify removed for testing simplicity
-
